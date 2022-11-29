@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-
+const dotenv = require('dotenv').config()
 const Product = require('./models/product')
 
-mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.DB_URL)
     .then(() => {
         console.log('MONGO CONNECTION OPEN')
     })
@@ -10,11 +10,6 @@ mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true,
         console.log('OH NO MONGO CONNECTION ERROR');
         console.log(e);
     })
-
-
-
-
-
 
 const seedProducts = [
 

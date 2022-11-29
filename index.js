@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-
+const cors = require('cors')
+const dotenv = require('dotenv').config()
 const Product = require('./models/product')
 
-mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.DB_URL)
     .then(() => {
         console.log('MONGO CONNECTION OPEN')
     })
@@ -15,9 +16,9 @@ const methodOverride = require('method-override')
 const express = require('express')
 const path = require('path')
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-
+app.use(cors())
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(express.json())
 app.use(methodOverride('_method'))
@@ -68,6 +69,9 @@ app.delete('/products/:id', async(req, res) => {
     const { id } = req.params
     await Product.findByIdAndDelete(id)
     res.redirect('/products')
+})
+app.use('/', (req, res) => {
+    res.send('Hello got to endpoint /products to start')
 })
 
 app.listen(port, () => {
